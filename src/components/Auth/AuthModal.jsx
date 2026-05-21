@@ -186,18 +186,27 @@ function AuthModal({ isOpen, onClose, defaultMode = 'login', onSuccess }) {
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isGoogleEnabled}
                 className="inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <GoogleIcon />
                 Continue with Google
               </button>
 
-              <p className="text-xs leading-5 text-slate-400">
-                {isGoogleEnabled
-                  ? 'You can use Google sign-in on this deployment.'
-                  : 'If Google provider is disabled in Supabase, you will see a clear setup message instead of a raw error.'}
-              </p>
+              {!isGoogleEnabled ? (
+                <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-xs leading-5 text-amber-100">
+                  <p className="font-semibold text-amber-50">Google is not ready yet</p>
+                  <p className="mt-1 text-amber-100/90">
+                    Enable the provider in Supabase and use a real Google OAuth client ID/secret.
+                    The values must come from Google Cloud and the client ID normally ends in
+                    <span className="font-medium"> .apps.googleusercontent.com</span>.
+                  </p>
+                </div>
+              ) : (
+                <p className="text-xs leading-5 text-slate-400">
+                  Google sign-in is enabled for this deployment.
+                </p>
+              )}
             </form>
           </motion.div>
         </motion.div>

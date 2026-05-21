@@ -1,20 +1,20 @@
 import { supabase } from '../lib/supabase'
 
-const googleProviderDisabledMessage =
-  'Google sign-in is not enabled in Supabase yet. Enable the provider first.'
+const googleProviderSetupMessage =
+  'Google sign-in is not configured in Supabase. Enable the Google provider, then paste a real Google OAuth Client ID and Client Secret.'
 
 function normalizeAuthError(error) {
   const message = error?.message ?? ''
 
   if (
     error?.error_code === 'validation_failed' &&
-    /Unsupported provider/i.test(message)
+    /(Unsupported provider|provider is not enabled|client id|client secret|oauth)/i.test(message)
   ) {
-    return new Error(googleProviderDisabledMessage)
+    return new Error(googleProviderSetupMessage)
   }
 
   if (/provider is not enabled/i.test(message) || /unsupported provider/i.test(message)) {
-    return new Error(googleProviderDisabledMessage)
+    return new Error(googleProviderSetupMessage)
   }
 
   return error instanceof Error ? error : new Error(message || 'Authentication failed')

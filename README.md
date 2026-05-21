@@ -66,8 +66,12 @@ Enable Auth providers in Supabase:
 
 1. Email/password authentication.
 2. Google provider.
-3. Add your local redirect URL, usually `http://localhost:5173/`.
-4. Set `VITE_SUPABASE_GOOGLE_ENABLED=true` in `.env.local` after Google provider is enabled.
+3. In the Google provider settings, use your real Google OAuth Client ID and Client Secret from Google Cloud Console.
+4. The Client ID should look like a Google domain string, usually ending in `.apps.googleusercontent.com`.
+5. Do not use your project name, app name, or random text in the Client ID field.
+6. Add your Supabase callback URL exactly as shown in the dashboard, for example `https://<project-ref>.supabase.co/auth/v1/callback`.
+7. Add your local redirect URL, usually `http://localhost:5173/` or the Vite port shown in the terminal.
+8. Set `VITE_SUPABASE_GOOGLE_ENABLED=true` in `.env.local` after Google provider is enabled.
 
 Recommended RLS policies:
 

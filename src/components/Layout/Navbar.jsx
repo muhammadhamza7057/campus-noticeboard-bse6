@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { BellRing, ChevronDown, Edit3, LogOut, LogIn, Settings, Sparkles, UserCircle2 } from 'lucide-react'
+import { BellRing, Edit3, LogOut, LogIn, Settings, Sparkles, UserCircle2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditProfile, onOpenSettings }) {
@@ -74,24 +74,15 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((current) => !current)}
-                className="inline-flex w-full items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-left text-slate-200 shadow-lg shadow-slate-950/20 backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/10 sm:w-auto"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-slate-950/20 backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/10"
                 aria-expanded={isMenuOpen}
                 aria-haspopup="menu"
+                aria-label="Open profile menu"
               >
-                <span className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 text-xs font-bold text-white shadow-inner shadow-slate-950/20 ring-1 ring-white/10">
-                    {initials || <UserCircle2 className="h-4 w-4 text-white" />}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block max-w-[11rem] truncate text-sm font-semibold text-white sm:max-w-[12rem]">
-                      {displayName}
-                    </span>
-                    <span className="block max-w-[11rem] truncate text-xs text-slate-400 sm:max-w-[12rem]">
-                      {displayEmail}
-                    </span>
-                  </span>
+                <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 text-xs font-bold text-white shadow-inner shadow-slate-950/20 ring-1 ring-white/10">
+                  {initials || <UserCircle2 className="h-5 w-5 text-white" />}
+                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-slate-950 bg-emerald-400" />
                 </span>
-                <ChevronDown className={`h-4 w-4 shrink-0 text-slate-300 transition ${isMenuOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isMenuOpen ? (
@@ -101,12 +92,19 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ duration: 0.18 }}
                   role="menu"
-                  className="absolute right-0 top-[calc(100%+0.75rem)] z-30 w-full min-w-[16rem] overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/98 shadow-[0_24px_80px_rgba(2,6,23,0.55)] backdrop-blur-xl sm:w-80"
+                  className="absolute right-0 top-[calc(100%+0.75rem)] z-30 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/98 shadow-[0_24px_80px_rgba(2,6,23,0.55)] backdrop-blur-xl"
                 >
                   <div className="border-b border-white/10 px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/90">Signed in</p>
-                    <p className="mt-1 truncate text-sm font-semibold text-white">{displayName}</p>
-                    <p className="truncate text-xs text-slate-400">{displayEmail}</p>
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 text-xs font-bold text-white shadow-inner shadow-slate-950/20 ring-1 ring-white/10">
+                        {initials || <UserCircle2 className="h-5 w-5 text-white" />}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/90">Signed in</p>
+                        <p className="truncate text-sm font-semibold text-white">{displayName}</p>
+                        <p className="truncate text-xs text-slate-400">{displayEmail}</p>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="p-2">
