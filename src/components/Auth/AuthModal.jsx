@@ -218,7 +218,7 @@ function InputRow({ icon: Icon, action, ...props }) {
       <Icon className="h-4 w-4 shrink-0 text-cyan-300" />
       <input
         {...props}
-        className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-400"
+        className="auth-input w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-400"
       />
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
