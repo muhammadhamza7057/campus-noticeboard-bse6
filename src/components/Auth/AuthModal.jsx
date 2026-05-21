@@ -64,11 +64,6 @@ function AuthModal({ isOpen, onClose, defaultMode = 'login', onSuccess }) {
   }
 
   const handleGoogleSignIn = async () => {
-    if (!isGoogleEnabled) {
-      toast.error('Google sign-in is not enabled in Supabase yet. Enable the provider first.')
-      return
-    }
-
     try {
       setIsSubmitting(true)
       await signInWithGoogle()
@@ -195,15 +190,14 @@ function AuthModal({ isOpen, onClose, defaultMode = 'login', onSuccess }) {
                 className="inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <GoogleIcon />
-                {isGoogleEnabled ? 'Continue with Google' : 'Google sign-in disabled'}
+                Continue with Google
               </button>
 
-              {!isGoogleEnabled ? (
-                <p className="text-xs leading-5 text-slate-400">
-                  Enable Google provider in Supabase and set the redirect URL to this app before
-                  using Google sign-in.
-                </p>
-              ) : null}
+              <p className="text-xs leading-5 text-slate-400">
+                {isGoogleEnabled
+                  ? 'You can use Google sign-in on this deployment.'
+                  : 'If Google provider is disabled in Supabase, you will see a clear setup message instead of a raw error.'}
+              </p>
             </form>
           </motion.div>
         </motion.div>

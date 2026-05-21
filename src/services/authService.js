@@ -1,5 +1,25 @@
 import { supabase } from '../lib/supabase'
 
+const googleProviderDisabledMessage =
+  'Google sign-in is not enabled in Supabase yet. Enable the provider first.'
+
+function normalizeAuthError(error) {
+  const message = error?.message ?? ''
+
+  if (
+    error?.error_code === 'validation_failed' &&
+    /Unsupported provider/i.test(message)
+  ) {
+    return new Error(googleProviderDisabledMessage)
+  }
+
+  if (/provider is not enabled/i.test(message) || /unsupported provider/i.test(message)) {
+    return new Error(googleProviderDisabledMessage)
+  }
+
+  return error instanceof Error ? error : new Error(message || 'Authentication failed')
+}
+
 export async function signInWithEmail(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
@@ -39,21 +59,25 @@ export async function signUpWithEmail({ email, password, displayName }) {
 export async function signInWithGoogle() {
   const redirectTo = window.location.origin
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo,
-      queryParams: {
-        prompt: 'select_account',
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        queryParams: {
+          prompt: 'select_account',
+        },
       },
-    },
-  })
+    })
 
-  if (error) {
-    throw error
+    if (error) {
+      throw normalizeAuthError(error)
+    }
+
+    return data
+  } catch (error) {
+    throw normalizeAuthError(error)
   }
-
-  return data
 }
 
 export async function signOut() {
