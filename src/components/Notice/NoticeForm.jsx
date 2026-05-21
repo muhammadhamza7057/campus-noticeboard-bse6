@@ -4,13 +4,11 @@ import { FileText, MessageSquare, Tag, X } from 'lucide-react'
 
 const initialForm = {
   title: '',
-  description: '',
+  body: '',
   category: 'General',
-  priority: 'Normal',
-  author: '',
 }
 
-function NoticeForm({ isOpen, onClose, onSubmit }) {
+function NoticeForm({ isOpen, onClose, onSubmit, profile, isSignedIn, onOpenAuth }) {
   const [formData, setFormData] = useState(initialForm)
 
   const handleChange = (event) => {
@@ -20,10 +18,16 @@ function NoticeForm({ isOpen, onClose, onSubmit }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    if (!isSignedIn) {
+      onClose()
+      onOpenAuth?.('signup')
+      return
+    }
+
     await onSubmit({
       ...formData,
-      id: crypto.randomUUID(),
-      date: new Date().toISOString(),
+      description: formData.body,
     })
     setFormData(initialForm)
   }
@@ -52,6 +56,11 @@ function NoticeForm({ isOpen, onClose, onSubmit }) {
                   Create notice
                 </p>
                 <h3 className="mt-2 text-2xl font-semibold text-white">Publish a new announcement</h3>
+                <p className="mt-2 max-w-lg text-sm text-slate-300">
+                  {isSignedIn
+                    ? `Posting as ${profile?.display_name ?? profile?.email ?? 'Campus User'}`
+                    : 'Sign in or create an account to publish a notice.'}
+                </p>
               </div>
               <button
                 type="button"
@@ -76,8 +85,8 @@ function NoticeForm({ isOpen, onClose, onSubmit }) {
 
               <Field icon={MessageSquare}>
                 <textarea
-                  name="description"
-                  value={formData.description}
+                  name="body"
+                  value={formData.body}
                   onChange={handleChange}
                   placeholder="Notice details"
                   rows="4"
@@ -101,37 +110,22 @@ function NoticeForm({ isOpen, onClose, onSubmit }) {
                     ))}
                   </select>
                 </Field>
-
-                <Field icon={Tag}>
-                  <select
-                    name="priority"
-                    value={formData.priority}
-                    onChange={handleChange}
-                    className="w-full bg-transparent text-sm text-white outline-none"
-                  >
-                    {['Normal', 'High'].map((option) => (
-                      <option key={option} value={option} className="bg-slate-950">
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
               </div>
 
-              <Field icon={FileText}>
-                <input
-                  name="author"
-                  value={formData.author}
-                  onChange={handleChange}
-                  placeholder="Posted by"
-                  required
-                  className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-400"
-                />
-              </Field>
+              {!isSignedIn ? (
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth?.('signup')}
+                  className="w-full rounded-2xl border border-dashed border-cyan-400/30 bg-cyan-400/5 px-4 py-3 text-sm font-medium text-cyan-100 transition hover:bg-cyan-400/10"
+                >
+                  Sign in to continue
+                </button>
+              ) : null}
 
               <button
                 type="submit"
-                className="w-full rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-4 py-3 font-semibold text-white transition hover:shadow-lg hover:shadow-indigo-950/40"
+                className="w-full rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-4 py-3 font-semibold text-white transition hover:shadow-lg hover:shadow-indigo-950/40 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={!isSignedIn}
               >
                 Post notice
               </button>

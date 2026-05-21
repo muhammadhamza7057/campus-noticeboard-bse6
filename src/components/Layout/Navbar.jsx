@@ -1,7 +1,9 @@
-import { BellRing, LogIn, Sparkles } from 'lucide-react'
+import { BellRing, LogOut, LogIn, Sparkles, UserCircle2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-function Navbar({ onOpenAuth, onOpenForm }) {
+function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut }) {
+  const displayName = profile?.display_name ?? user?.email ?? 'Guest'
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -23,14 +25,29 @@ function Navbar({ onOpenAuth, onOpenForm }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            onClick={onOpenAuth}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
-          >
-            <LogIn className="h-4 w-4" />
-            Sign in
-          </button>
+          {user ? (
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">
+              <UserCircle2 className="h-4 w-4 text-cyan-300" />
+              <span className="max-w-[8rem] truncate sm:max-w-[12rem]">{displayName}</span>
+              <button
+                type="button"
+                onClick={onSignOut}
+                className="inline-flex h-8 items-center justify-center rounded-full border border-white/10 bg-slate-950/50 px-3 text-xs font-medium text-slate-100 transition hover:bg-white/10"
+              >
+                <LogOut className="mr-1 h-3.5 w-3.5" />
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onOpenAuth}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              <LogIn className="h-4 w-4" />
+              Sign in
+            </button>
+          )}
           <button
             type="button"
             onClick={onOpenForm}

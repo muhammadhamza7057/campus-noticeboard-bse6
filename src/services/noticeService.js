@@ -6,10 +6,11 @@ function toNotice(item) {
   return {
     id: item.id,
     title: item.title,
-    description: item.description,
+    description: item.body,
+    body: item.body,
     category: item.category,
-    priority: item.priority,
-    author: item.author,
+    author: item.author ?? item.profiles?.display_name ?? 'Campus User',
+    userId: item.user_id,
     date: item.date ?? item.created_at ?? new Date().toISOString(),
   }
 }
@@ -22,7 +23,7 @@ export const noticeService = {
 
     const { data, error } = await supabase
       .from(tableName)
-      .select('id, title, description, category, priority, author, date, created_at')
+      .select('id, title, body, category, created_at, user_id, profiles:profiles(id, display_name, email)')
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -38,11 +39,9 @@ export const noticeService = {
 
     const record = {
       title: payload.title,
-      description: payload.description,
+      body: payload.description,
       category: payload.category,
-      priority: payload.priority,
-      author: payload.author,
-      date: payload.date,
+      user_id: payload.userId,
     }
 
     const { data, error } = await supabase.from(tableName).insert(record).select().single()

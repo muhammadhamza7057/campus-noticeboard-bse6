@@ -27,3 +27,62 @@ Modern realtime campus notice board platform.
 ## Installation
 npm install
 npm run dev
+
+## Supabase Setup
+
+Create these tables in Supabase:
+
+```sql
+create table public.profiles (
+	id uuid not null,
+	email text not null,
+	display_name text null,
+	created_at timestamp with time zone null default now(),
+	constraint profiles_pkey primary key (id)
+);
+
+create table public.notices (
+	id bigint generated always as identity not null,
+	user_id uuid null,
+	title text not null,
+	body text not null,
+	category text not null,
+	created_at timestamp with time zone null default now(),
+	constraint notices_pkey primary key (id),
+	constraint notices_user_id_fkey foreign key (user_id) references profiles (id) on delete CASCADE
+);
+```
+
+Enable Auth providers in Supabase:
+
+1. Email/password authentication.
+2. Google provider.
+3. Add your local redirect URL, usually `http://localhost:5173/`.
+4. Set `VITE_SUPABASE_GOOGLE_ENABLED=true` in `.env.local` after Google provider is enabled.
+
+Recommended RLS policies:
+
+```sql
+alter table public.profiles enable row level security;
+alter table public.notices enable row level security;
+
+create policy "profiles read own"
+on public.profiles
+for select
+using (auth.uid() = id);
+
+create policy "profiles upsert own"
+on public.profiles
+for insert
+with check (auth.uid() = id);
+
+create policy "notices read all"
+on public.notices
+for select
+using (true);
+
+create policy "notices insert own"
+on public.notices
+for insert
+with check (auth.uid() = user_id);
+```

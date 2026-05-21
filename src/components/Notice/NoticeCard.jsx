@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CalendarDays, CircleAlert, Tag, User } from 'lucide-react'
+import { CalendarDays, Tag, User } from 'lucide-react'
 import { formatDate } from '../../utils/formatDate'
 
 const categoryStyles = {
@@ -29,12 +29,6 @@ function NoticeCard({ notice }) {
             <Tag className="h-3.5 w-3.5" />
             {notice.category}
           </span>
-          {notice.priority === 'High' ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-200">
-              <CircleAlert className="h-3.5 w-3.5" />
-              High priority
-            </span>
-          ) : null}
         </div>
 
         <h3 className="mt-4 text-xl font-semibold leading-snug text-white">{notice.title}</h3>
