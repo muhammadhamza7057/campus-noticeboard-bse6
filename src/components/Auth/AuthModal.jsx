@@ -5,7 +5,6 @@ import { toast } from 'react-hot-toast'
 import { signInWithEmail, signInWithGoogle, signUpWithEmail } from '../../services/authService'
 
 function AuthModal({ isOpen, onClose, defaultMode = 'login', onSuccess }) {
-  const isGoogleEnabled = import.meta.env.VITE_SUPABASE_GOOGLE_ENABLED === 'true'
   const [mode, setMode] = useState(defaultMode)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -186,27 +185,17 @@ function AuthModal({ isOpen, onClose, defaultMode = 'login', onSuccess }) {
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
-                disabled={isSubmitting || !isGoogleEnabled}
+                disabled={isSubmitting}
                 className="inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <GoogleIcon />
                 Continue with Google
               </button>
 
-              {!isGoogleEnabled ? (
-                <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-xs leading-5 text-amber-100">
-                  <p className="font-semibold text-amber-50">Google is not ready yet</p>
-                  <p className="mt-1 text-amber-100/90">
-                    Enable the provider in Supabase and use a real Google OAuth client ID/secret.
-                    The values must come from Google Cloud and the client ID normally ends in
-                    <span className="font-medium"> .apps.googleusercontent.com</span>.
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs leading-5 text-slate-400">
-                  Google sign-in is enabled for this deployment.
-                </p>
-              )}
+              <p className="text-xs leading-5 text-slate-400">
+                If Google is not fully enabled in Supabase, you will still be able to tap the
+                button and see a clear setup message instead of a raw error.
+              </p>
             </form>
           </motion.div>
         </motion.div>
