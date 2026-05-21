@@ -147,10 +147,10 @@ function App() {
       <button
         type="button"
         onClick={handleOpenForm}
-        className="fixed bottom-5 right-5 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-5 text-sm font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:scale-105 hover:shadow-indigo-950/60 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950 sm:bottom-7 sm:right-7"
+        className="fixed bottom-4 right-4 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:scale-105 hover:shadow-indigo-950/60 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950 sm:bottom-7 sm:right-7 sm:px-5"
       >
         <Plus className="h-5 w-5" />
-        Add Notice
+        <span className="hidden sm:inline">Add Notice</span>
       </button>
 
       <AuthModal

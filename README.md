@@ -19,7 +19,16 @@ Modern realtime campus notice board platform.
 - Vercel
 
 ## Live Demo
-(Add Vercel URL)
+[campus-noticeboard-bse6.vercel.app](https://campus-noticeboard-bse6.vercel.app)
+
+## Mobile Testing
+
+To test the app on your mobile phone while running it locally:
+
+1. Make sure your phone and computer are on the same Wi-Fi network.
+2. Start the dev server with `npm run dev -- --host 0.0.0.0`.
+3. Open the network URL shown in the terminal on your phone, such as `http://10.x.x.x:5174/`.
+4. If the browser cannot connect, allow the app through your Windows firewall for local network access.
 
 ## Screenshots
 (Add screenshots)

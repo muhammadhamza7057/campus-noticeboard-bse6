@@ -34,24 +34,24 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
           {user ? (
-            <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 shadow-lg shadow-slate-950/20 backdrop-blur-xl">
+            <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-slate-200 shadow-lg shadow-slate-950/20 backdrop-blur-xl sm:flex-row sm:items-center sm:py-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 text-xs font-bold text-white shadow-inner shadow-slate-950/20 ring-1 ring-white/10">
                 {initials || <UserCircle2 className="h-4 w-4 text-white" />}
               </div>
-              <div className="min-w-0">
-                <p className="max-w-[8rem] truncate text-sm font-semibold text-white sm:max-w-[12rem]">
+              <div className="min-w-0 flex-1">
+                <p className="max-w-[12rem] truncate text-sm font-semibold text-white sm:max-w-[12rem]">
                   {displayName}
                 </p>
-                <p className="max-w-[8rem] truncate text-xs text-slate-400 sm:max-w-[12rem]">
+                <p className="max-w-[12rem] truncate text-xs text-slate-400 sm:max-w-[12rem]">
                   {displayEmail}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={onSignOut}
-                className="inline-flex h-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/60 px-3 text-xs font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-slate-950/60 px-4 text-xs font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10 sm:h-9 sm:px-3"
               >
                 <LogOut className="mr-1 h-3.5 w-3.5" />
                 Sign out
@@ -61,7 +61,7 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
             <button
               type="button"
               onClick={onOpenAuth}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10 sm:w-auto sm:py-2"
             >
               <LogIn className="h-4 w-4" />
               Sign in
@@ -70,7 +70,7 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
           <button
             type="button"
             onClick={onOpenForm}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-100"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-100 sm:w-auto sm:py-2"
           >
             <Sparkles className="h-4 w-4 text-indigo-600" />
             Post Notice

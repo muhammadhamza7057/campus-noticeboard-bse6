@@ -39,7 +39,7 @@ function Hero({ onPrimaryAction, onSecondaryAction, isSignedIn }) {
           <button
             type="button"
             onClick={onPrimaryAction}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:-translate-y-0.5 hover:shadow-indigo-950/60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:-translate-y-0.5 hover:shadow-indigo-950/60 sm:w-auto"
           >
             Publish a notice
             <ArrowRight className="h-4 w-4" />
@@ -48,7 +48,7 @@ function Hero({ onPrimaryAction, onSecondaryAction, isSignedIn }) {
             <button
               type="button"
               onClick={onSecondaryAction}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10 sm:w-auto"
             >
               Explore sign in
             </button>
