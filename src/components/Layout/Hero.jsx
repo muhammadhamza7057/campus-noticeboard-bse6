@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, ShieldCheck, Users, Zap } from 'lucide-react'
 
-function Hero({ onPrimaryAction, onSecondaryAction }) {
+function Hero({ onPrimaryAction, onSecondaryAction, isSignedIn }) {
   return (
     <section className="grid items-center gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8">
       <div className="space-y-6 lg:pr-2">
@@ -44,13 +44,15 @@ function Hero({ onPrimaryAction, onSecondaryAction }) {
             Publish a notice
             <ArrowRight className="h-4 w-4" />
           </button>
-          <button
-            type="button"
-            onClick={onSecondaryAction}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
-          >
-            Explore sign in
-          </button>
+          {!isSignedIn ? (
+            <button
+              type="button"
+              onClick={onSecondaryAction}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              Explore sign in
+            </button>
+          ) : null}
         </motion.div>
 
         <div className="grid gap-3 sm:grid-cols-3">

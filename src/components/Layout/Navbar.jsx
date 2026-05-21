@@ -1,7 +1,9 @@
 import { BellRing, LogOut, LogIn, Sparkles, UserCircle2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 
-function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut }) {
+function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditProfile, onOpenSettings }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const displayName = profile?.display_name ?? user?.email ?? 'Guest'
   const displayEmail = profile?.email ?? user?.email ?? ''
   const initials = displayName

@@ -110,7 +110,11 @@ function App() {
         />
 
         <main className="flex-1 space-y-8 pb-8 pt-5 sm:space-y-10 sm:pt-8 lg:pt-12">
-          <Hero onPrimaryAction={handleOpenForm} onSecondaryAction={() => handleOpenAuth('login')} />
+          <Hero
+            onPrimaryAction={handleOpenForm}
+            onSecondaryAction={() => handleOpenAuth('login')}
+            isSignedIn={isSignedIn}
+          />
 
           <section className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-[0_24px_80px_rgba(2,6,23,0.5)] backdrop-blur-xl sm:p-6 lg:p-7">
             <FilterBar

@@ -6,6 +6,33 @@ export function useAuth() {
   const [profile, setProfile] = useState(null)
   const [isAuthLoading, setIsAuthLoading] = useState(true)
 
+  const refreshProfile = async () => {
+    const { data } = await supabase.auth.getSession()
+    const currentUser = data.session?.user ?? null
+
+    if (!currentUser) {
+      setProfile(null)
+      return null
+    }
+
+    const displayName = currentUser.user_metadata?.display_name ?? currentUser.email
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('id, email, display_name')
+      .eq('id', currentUser.id)
+      .maybeSingle()
+
+    const nextProfile =
+      profileData ?? {
+        id: currentUser.id,
+        email: currentUser.email,
+        display_name: displayName,
+      }
+
+    setProfile(nextProfile)
+    return nextProfile
+  }
+
   useEffect(() => {
     let isMounted = true
 
@@ -94,5 +121,6 @@ export function useAuth() {
     user: session?.user ?? null,
     isSignedIn: Boolean(session?.user),
     isAuthLoading,
+    refreshProfile,
   }
 }
