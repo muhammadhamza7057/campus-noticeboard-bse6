@@ -11,6 +11,8 @@ import FilterBar from './components/Notice/FilterBar'
 import NoticeCard from './components/Notice/NoticeCard'
 import EmptyState from './components/Notice/EmptyState'
 import Loader from './components/UI/Loader'
+import EditProfileModal from './components/Profile/EditProfileModal'
+import SettingsModal from './components/Profile/SettingsModal'
 import { categories, seedNotices } from './lib/constants'
 import { useNotices } from './hooks/useNotices'
 import { useAuth } from './hooks/useAuth'
@@ -23,6 +25,8 @@ function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState('login')
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const pendingPostKey = 'campusflow_pending_post'
 
   const filteredNotices = useMemo(() => {
@@ -75,6 +79,8 @@ function App() {
 
   const handleSignOut = async () => {
     localStorage.removeItem(pendingPostKey)
+    setIsEditProfileOpen(false)
+    setIsSettingsOpen(false)
     await signOut()
     toast.success('Signed out successfully')
   }
@@ -107,6 +113,8 @@ function App() {
           user={user}
           profile={profile}
           onSignOut={handleSignOut}
+          onOpenEditProfile={() => setIsEditProfileOpen(true)}
+          onOpenSettings={() => setIsSettingsOpen(true)}
         />
 
         <main className="flex-1 space-y-8 pb-8 pt-5 sm:space-y-10 sm:pt-8 lg:pt-12">
@@ -166,6 +174,18 @@ function App() {
         profile={profile}
         isSignedIn={isSignedIn}
         onOpenAuth={handleOpenAuth}
+      />
+      <EditProfileModal
+        isOpen={isEditProfileOpen}
+        onClose={() => setIsEditProfileOpen(false)}
+        profile={profile}
+        onSaved={() => refreshProfile()}
+      />
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        profile={profile}
+        isSignedIn={isSignedIn}
       />
     </div>
   )
