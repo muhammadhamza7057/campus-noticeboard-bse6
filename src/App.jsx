@@ -20,7 +20,7 @@ import { signOut } from './services/authService'
 
 function App() {
   const { notices, isLoading, addNotice } = useNotices(seedNotices)
-  const { user, profile, isSignedIn, isAuthLoading } = useAuth()
+  const { user, profile, isSignedIn, isAuthLoading, refreshProfile } = useAuth()
   const [activeCategory, setActiveCategory] = useState('All')
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState('login')
