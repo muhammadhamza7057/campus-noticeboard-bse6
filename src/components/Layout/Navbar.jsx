@@ -55,7 +55,7 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
       transition={{ duration: 0.45 }}
       className="sticky top-0 z-20 pt-4"
     >
-      <div className="flex flex-col gap-4 rounded-[1.75rem] border border-white/10 bg-slate-950/55 px-4 py-4 shadow-lg shadow-slate-950/30 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-5">
+      <div className="flex flex-col gap-4 rounded-[1.75rem] border border-white/10 bg-slate-950/55 px-4 py-4 shadow-lg shadow-slate-950/30 backdrop-blur-xl sm:px-5">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 text-white shadow-lg shadow-indigo-950/30 ring-1 ring-white/10">
             <BellRing className="h-5 w-5" />
@@ -68,7 +68,16 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={onOpenForm}
+            className="inline-flex min-w-0 items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-100 sm:px-5 sm:py-2.5"
+          >
+            <Sparkles className="h-4 w-4 text-indigo-600" />
+            <span className="truncate">Post Notice</span>
+          </button>
+
           {user ? (
             <div ref={menuRef} className="relative">
               <button
@@ -143,20 +152,12 @@ function Navbar({ onOpenAuth, onOpenForm, user, profile, onSignOut, onOpenEditPr
             <button
               type="button"
               onClick={onOpenAuth}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10 sm:w-auto sm:py-2"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 shadow-lg shadow-slate-950/20 backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/10"
+              aria-label="Sign in"
             >
               <LogIn className="h-4 w-4" />
-              Sign in
             </button>
           )}
-          <button
-            type="button"
-            onClick={onOpenForm}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-100 sm:w-auto sm:py-2"
-          >
-            <Sparkles className="h-4 w-4 text-indigo-600" />
-            Post Notice
-          </button>
         </div>
       </div>
     </motion.header>

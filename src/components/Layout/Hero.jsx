@@ -89,8 +89,8 @@ function Hero({ onPrimaryAction, onSecondaryAction, isSignedIn }) {
               Important notices are surfaced first.
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-300">
-              Smooth card transitions, category filters, and a floating create action keep the
-              experience fast on every screen size.
+              Smooth card transitions, category filters, and clear create and account controls keep
+              the experience fast on every screen size.
             </p>
 
             <div className="mt-6 space-y-3">

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CalendarDays, Tag, User } from 'lucide-react'
+import { CalendarDays, PencilLine, Tag, Trash2, User } from 'lucide-react'
 import { formatDate } from '../../utils/formatDate'
 
 const categoryStyles = {
@@ -10,7 +10,7 @@ const categoryStyles = {
   Hostel: 'from-emerald-500/20 to-emerald-500/5 text-emerald-200 border-emerald-400/20',
 }
 
-function NoticeCard({ notice }) {
+function NoticeCard({ notice, isOwner = false, onEdit, onDelete }) {
   const accent = categoryStyles[notice.category] ?? categoryStyles.General
 
   return (
@@ -29,6 +29,29 @@ function NoticeCard({ notice }) {
             <Tag className="h-3.5 w-3.5" />
             {notice.category}
           </span>
+
+          {isOwner ? (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onEdit}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/45 text-slate-100 transition hover:-translate-y-0.5 hover:bg-white/10"
+                aria-label="Edit notice"
+                title="Edit"
+              >
+                <PencilLine className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={onDelete}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-400/20 bg-rose-500/10 text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20"
+                aria-label="Delete notice"
+                title="Delete"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ) : null}
         </div>
 
         <h3 className="mt-4 text-xl font-semibold leading-snug text-white">{notice.title}</h3>

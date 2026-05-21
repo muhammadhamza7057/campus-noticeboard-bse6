@@ -34,7 +34,14 @@ export const noticeService = {
   },
   create: async (payload) => {
     if (!supabase) {
-      throw new Error('Supabase is not configured')
+      return toNotice({
+        id: crypto.randomUUID(),
+        title: payload.title,
+        body: payload.description,
+        category: payload.category,
+        user_id: payload.userId,
+        created_at: new Date().toISOString(),
+      })
     }
 
     const record = {
@@ -51,5 +58,50 @@ export const noticeService = {
     }
 
     return toNotice(data)
+  },
+  update: async (payload) => {
+    const record = {
+      title: payload.title,
+      body: payload.description,
+      category: payload.category,
+      user_id: payload.userId,
+    }
+
+    if (!supabase) {
+      return toNotice({
+        id: payload.id,
+        title: record.title,
+        body: record.body,
+        category: record.category,
+        user_id: record.user_id,
+        created_at: payload.date ?? new Date().toISOString(),
+      })
+    }
+
+    const { data, error } = await supabase
+      .from(tableName)
+      .update(record)
+      .eq('id', payload.id)
+      .select('id, title, body, category, created_at, user_id, profiles:profiles(id, display_name, email)')
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return toNotice(data)
+  },
+  remove: async (noticeId) => {
+    if (!supabase) {
+      return true
+    }
+
+    const { error } = await supabase.from(tableName).delete().eq('id', noticeId)
+
+    if (error) {
+      throw error
+    }
+
+    return true
   },
 }

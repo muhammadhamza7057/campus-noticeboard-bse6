@@ -37,5 +37,17 @@ export function useNotices(seedNotices) {
     setNotices((current) => [savedNotice, ...current])
   }
 
-  return { notices, isLoading, addNotice }
+  const updateNotice = async (notice) => {
+    const savedNotice = await noticeService.update(notice)
+
+    setNotices((current) => current.map((item) => (item.id === savedNotice.id ? savedNotice : item)))
+  }
+
+  const deleteNotice = async (noticeId) => {
+    await noticeService.remove(noticeId)
+
+    setNotices((current) => current.filter((item) => item.id !== noticeId))
+  }
+
+  return { notices, isLoading, addNotice, updateNotice, deleteNotice }
 }

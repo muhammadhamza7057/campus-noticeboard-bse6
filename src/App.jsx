@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Plus } from 'lucide-react'
 import { Toaster, toast } from 'react-hot-toast'
 import Navbar from './components/Layout/Navbar'
 import Hero from './components/Layout/Hero'
@@ -11,6 +10,7 @@ import FilterBar from './components/Notice/FilterBar'
 import NoticeCard from './components/Notice/NoticeCard'
 import EmptyState from './components/Notice/EmptyState'
 import Loader from './components/UI/Loader'
+import ConfirmDialog from './components/UI/ConfirmDialog'
 import EditProfileModal from './components/Profile/EditProfileModal'
 import SettingsModal from './components/Profile/SettingsModal'
 import { categories, seedNotices } from './lib/constants'
@@ -19,12 +19,14 @@ import { useAuth } from './hooks/useAuth'
 import { signOut } from './services/authService'
 
 function App() {
-  const { notices, isLoading, addNotice } = useNotices(seedNotices)
+  const { notices, isLoading, addNotice, updateNotice, deleteNotice } = useNotices(seedNotices)
   const { user, profile, isSignedIn, isAuthLoading, refreshProfile } = useAuth()
   const [activeCategory, setActiveCategory] = useState('All')
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState('login')
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingNotice, setEditingNotice] = useState(null)
+  const [noticeToDelete, setNoticeToDelete] = useState(null)
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const pendingPostKey = 'campusflow_pending_post'
@@ -37,7 +39,7 @@ function App() {
     return notices.filter((notice) => notice.category === activeCategory)
   }, [activeCategory, notices])
 
-  const handleAddNotice = async (notice) => {
+  const handleSubmitNotice = async (notice) => {
     if (!user) {
       setIsFormOpen(false)
       setAuthMode('signup')
@@ -47,12 +49,21 @@ function App() {
       return
     }
 
-    await addNotice({
+    const payload = {
       ...notice,
       userId: user.id,
-    })
+    }
+
+    if (notice.id) {
+      await updateNotice(payload)
+      toast.success('Notice updated successfully')
+    } else {
+      await addNotice(payload)
+      toast.success('Notice published successfully')
+    }
+
     setIsFormOpen(false)
-    toast.success('Notice published successfully')
+    setEditingNotice(null)
   }
 
   const handleOpenAuth = (mode = 'login') => {
@@ -61,6 +72,7 @@ function App() {
   }
 
   const handleOpenForm = () => {
+    setEditingNotice(null)
     if (!user) {
       localStorage.setItem(pendingPostKey, '1')
       handleOpenAuth('signup')
@@ -75,6 +87,26 @@ function App() {
       localStorage.removeItem(pendingPostKey)
       setIsFormOpen(true)
     }
+  }
+
+  const handleOpenEditNotice = (notice) => {
+    setEditingNotice(notice)
+    setIsFormOpen(true)
+  }
+
+  const handleCloseNoticeForm = () => {
+    setIsFormOpen(false)
+    setEditingNotice(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!noticeToDelete) {
+      return
+    }
+
+    await deleteNotice(noticeToDelete.id)
+    toast.success('Notice deleted successfully')
+    setNoticeToDelete(null)
   }
 
   const handleSignOut = async () => {
@@ -138,7 +170,13 @@ function App() {
                 <motion.div layout className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                   <AnimatePresence mode="popLayout">
                     {filteredNotices.map((notice) => (
-                      <NoticeCard key={notice.id} notice={notice} />
+                      <NoticeCard
+                        key={notice.id}
+                        notice={notice}
+                        isOwner={Boolean(user && notice.userId && notice.userId === user.id)}
+                        onEdit={() => handleOpenEditNotice(notice)}
+                        onDelete={() => setNoticeToDelete(notice)}
+                      />
                     ))}
                   </AnimatePresence>
                 </motion.div>
@@ -152,15 +190,6 @@ function App() {
         <Footer />
       </div>
 
-      <button
-        type="button"
-        onClick={handleOpenForm}
-        className="fixed bottom-4 right-4 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:scale-105 hover:shadow-indigo-950/60 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950 sm:bottom-7 sm:right-7 sm:px-5"
-      >
-        <Plus className="h-5 w-5" />
-        <span className="hidden sm:inline">Add Notice</span>
-      </button>
-
       <AuthModal
         isOpen={isAuthOpen}
         defaultMode={authMode}
@@ -169,11 +198,13 @@ function App() {
       />
       <NoticeForm
         isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        onSubmit={handleAddNotice}
+        onClose={handleCloseNoticeForm}
+        onSubmit={handleSubmitNotice}
         profile={profile}
         isSignedIn={isSignedIn}
         onOpenAuth={handleOpenAuth}
+        mode={editingNotice ? 'edit' : 'create'}
+        initialValues={editingNotice}
       />
       <EditProfileModal
         isOpen={isEditProfileOpen}
@@ -186,6 +217,15 @@ function App() {
         onClose={() => setIsSettingsOpen(false)}
         profile={profile}
         isSignedIn={isSignedIn}
+      />
+      <ConfirmDialog
+        isOpen={Boolean(noticeToDelete)}
+        title="Delete this notice?"
+        description={`This will permanently remove ${noticeToDelete?.title ?? 'the selected notice'}.`}
+        confirmLabel="Delete notice"
+        tone="danger"
+        onClose={() => setNoticeToDelete(null)}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   )

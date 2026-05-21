@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FileText, MessageSquare, Tag, X } from 'lucide-react'
 
@@ -8,8 +8,34 @@ const initialForm = {
   category: 'General',
 }
 
-function NoticeForm({ isOpen, onClose, onSubmit, profile, isSignedIn, onOpenAuth }) {
+function NoticeForm({
+  isOpen,
+  onClose,
+  onSubmit,
+  profile,
+  isSignedIn,
+  onOpenAuth,
+  mode = 'create',
+  initialValues = null,
+}) {
   const [formData, setFormData] = useState(initialForm)
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    if (initialValues) {
+      setFormData({
+        title: initialValues.title ?? '',
+        body: initialValues.body ?? initialValues.description ?? '',
+        category: initialValues.category ?? 'General',
+      })
+      return
+    }
+
+    setFormData(initialForm)
+  }, [initialValues, isOpen])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -26,10 +52,10 @@ function NoticeForm({ isOpen, onClose, onSubmit, profile, isSignedIn, onOpenAuth
     }
 
     await onSubmit({
+      id: initialValues?.id,
       ...formData,
       description: formData.body,
     })
-    setFormData(initialForm)
   }
 
   return (
@@ -53,12 +79,14 @@ function NoticeForm({ isOpen, onClose, onSubmit, profile, isSignedIn, onOpenAuth
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-300">
-                  Create notice
+                  {mode === 'edit' ? 'Update notice' : 'Create notice'}
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold text-white">Publish a new announcement</h3>
+                <h3 className="mt-2 text-2xl font-semibold text-white">
+                  {mode === 'edit' ? 'Edit your announcement' : 'Publish a new announcement'}
+                </h3>
                 <p className="mt-2 max-w-lg text-sm text-slate-300">
                   {isSignedIn
-                    ? `Posting as ${profile?.display_name ?? profile?.email ?? 'Campus User'}`
+                    ? `${mode === 'edit' ? 'Editing as' : 'Posting as'} ${profile?.display_name ?? profile?.email ?? 'Campus User'}`
                     : 'Sign in or create an account to publish a notice.'}
                 </p>
               </div>
@@ -127,7 +155,7 @@ function NoticeForm({ isOpen, onClose, onSubmit, profile, isSignedIn, onOpenAuth
                 className="w-full rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-4 py-3 font-semibold text-white transition hover:shadow-lg hover:shadow-indigo-950/40 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={!isSignedIn}
               >
-                Post notice
+                {mode === 'edit' ? 'Save changes' : 'Post notice'}
               </button>
             </form>
           </motion.div>
