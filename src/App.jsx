@@ -217,6 +217,8 @@ function App() {
         onClose={() => setIsSettingsOpen(false)}
         profile={profile}
         isSignedIn={isSignedIn}
+        onOpenEditProfile={() => setIsEditProfileOpen(true)}
+        onSignOut={handleSignOut}
       />
       <ConfirmDialog
         isOpen={Boolean(noticeToDelete)}

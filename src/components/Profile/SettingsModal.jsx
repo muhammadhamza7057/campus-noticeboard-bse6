@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Bell, Clock3, Settings, ShieldCheck, X } from 'lucide-react'
+import { Bell, Clock3, LogOut, PencilLine, Settings, ShieldCheck, X } from 'lucide-react'
 
-function SettingsModal({ isOpen, onClose, profile, isSignedIn }) {
+function SettingsModal({ isOpen, onClose, profile, isSignedIn, onOpenEditProfile, onSignOut }) {
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -40,6 +40,31 @@ function SettingsModal({ isOpen, onClose, profile, isSignedIn }) {
               <SettingRow icon={Bell} label="Email" value={profile?.email ?? 'Not set'} />
               <SettingRow icon={ShieldCheck} label="Signed in" value={isSignedIn ? 'Yes' : 'No'} />
               <SettingRow icon={Clock3} label="Last updated" value={new Date().toLocaleString()} />
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose()
+                  onOpenEditProfile?.()
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-slate-100 transition hover:bg-white/10"
+              >
+                <PencilLine className="h-4 w-4 text-cyan-300" />
+                Edit profile
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  onClose()
+                  await onSignOut?.()
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 font-semibold text-rose-100 transition hover:bg-rose-500/20"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
             </div>
           </motion.div>
         </motion.div>
