@@ -104,17 +104,25 @@ function App() {
       return
     }
 
-    await deleteNotice(noticeToDelete.id)
-    toast.success('Notice deleted successfully')
-    setNoticeToDelete(null)
+    try {
+      await deleteNotice(noticeToDelete.id)
+      toast.success('Notice deleted successfully')
+      setNoticeToDelete(null)
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete notice')
+    }
   }
 
   const handleSignOut = async () => {
-    localStorage.removeItem(pendingPostKey)
-    setIsEditProfileOpen(false)
-    setIsSettingsOpen(false)
-    await signOut()
-    toast.success('Signed out successfully')
+    try {
+      localStorage.removeItem(pendingPostKey)
+      setIsEditProfileOpen(false)
+      setIsSettingsOpen(false)
+      await signOut()
+      toast.success('Signed out successfully')
+    } catch (error) {
+      toast.error(error.message || 'Sign out failed')
+    }
   }
 
   useEffect(() => {
